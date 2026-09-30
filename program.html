@@ -14,6 +14,9 @@ body::-webkit-scrollbar {
     <canvas id="canvas" style="display: block;"></canvas>
 
     <script>
+        const PARENT_ORIGIN = "http://127.0.0.1:5500";
+        const LIVE_VARIABLES = new Set(["dt"]);
+
         const params = new URLSearchParams(window.location.search);
 
         const width = Number(params.get("width")) || 800;
@@ -32,6 +35,9 @@ body::-webkit-scrollbar {
             programHeight: height,
             dt: dt,
             r_multiplier: r_multiplier,
+            onRuntimeInitialized: () => {
+                parent.postMessage({ type: "program-ready" }, PARENT_ORIGIN);
+            },
             print: text => {
                 if (!firstOutputLogged) {
                     console.debug("Module.print called:", text);
@@ -39,7 +45,7 @@ body::-webkit-scrollbar {
                 }
                 parent.postMessage(
                     { type: "emscripten-output", stream: "stdout", text },
-                    location.origin
+                    PARENT_ORIGIN
                 );
             },
             printErr: text => {
@@ -49,10 +55,21 @@ body::-webkit-scrollbar {
                 }
                 parent.postMessage(
                     { type: "emscripten-output", stream: "stderr", text },
-                    location.origin
+                    PARENT_ORIGIN
                 );
             }
+            
         };
+        window.addEventListener("message", event => {
+            if (event.source !== parent || event.origin !== PARENT_ORIGIN) return;
+        
+            const message = event.data;
+            if (message?.type !== "set-variable") return;
+            if (!LIVE_VARIABLES.has(message.id)) return;
+            if (typeof message.value !== "number" || !Number.isFinite(message.value)) return;
+        
+            Module[message.id] = message.value;
+        });
 
     </script>
 

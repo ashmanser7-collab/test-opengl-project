@@ -1,5 +1,6 @@
 {
     "name": "Changing Colours",
+    "id": "colour-change",
     "variables": [
         {"id": "dt", "min": 0, "max": 1, "step": 0.001, "type": "active", "default": 0.02},
         {"id": "r_multiplier", "min": 0, "max": 10, "step": 0.1, "type": "constant", "default": 1}
