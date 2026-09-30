@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Program</title>
+</head>
+<style>
+html::-webkit-scrollbar, 
+body::-webkit-scrollbar {
+  display: none;
+}
+</style>
+<body style="margin: 0;">
+    <canvas id="canvas" style="display: block;"></canvas>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+
+        const width = Number(params.get("width")) || 800;
+        const height = Number(params.get("height")) || 600;
+        const dt = Number(params.get("dt"));
+        const r_multiplier = Number(params.get("r_multiplier"));
+
+        const canvas = document.getElementById("canvas");
+        canvas.width = width;
+        canvas.height = height;
+
+        let firstOutputLogged = false;
+        var Module = {
+            canvas,
+            programWidth: width,
+            programHeight: height,
+            dt: dt,
+            r_multiplier: r_multiplier,
+            print: text => {
+                if (!firstOutputLogged) {
+                    console.debug("Module.print called:", text);
+                    firstOutputLogged = true;
+                }
+                parent.postMessage(
+                    { type: "emscripten-output", stream: "stdout", text },
+                    location.origin
+                );
+            },
+            printErr: text => {
+                if (!firstOutputLogged) {
+                    console.debug("Module.printErr called:", text);
+                    firstOutputLogged = true;
+                }
+                parent.postMessage(
+                    { type: "emscripten-output", stream: "stderr", text },
+                    location.origin
+                );
+            }
+        };
+
+    </script>
+
+    <script src="index.js"></script>
+</body>
+</html>
