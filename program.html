@@ -56,6 +56,15 @@ body::-webkit-scrollbar {
 
     </script>
 
-    <script src="index.js"></script>
+    <script>
+        async function loadScript() {
+            const newScript = document.createElement("script");
+            
+            const response = await fetch(src);
+
+            newScript.textContent = await response.text();
+            document.appendChild(newScript);
+        }
+    </script>
 </body>
 </html>
