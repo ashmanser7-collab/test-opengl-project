@@ -19,6 +19,10 @@ body::-webkit-scrollbar {
             : null;
         const LIVE_VARIABLES = new Set(["dt"]);
 
+        const sendToParent = message => {
+            if (PARENT_ORIGIN) parent.postMessage(message, PARENT_ORIGIN);
+        };
+
         const params = new URLSearchParams(window.location.search);
 
         const width = Number(params.get("width")) || 800;
