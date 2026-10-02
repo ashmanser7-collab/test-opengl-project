@@ -1,10 +1,10 @@
 {
-    "name": "Changing Colours",
+    "name": "Test Project",
     "id": "colour-change",
     "variables": [
         {"id": "dt", "min": 0, "max": 1, "step": 0.001, "type": "active", "default": 0.02},
         {"id": "r_multiplier", "min": 0, "max": 10, "step": 0.1, "type": "constant", "default": 1}
     ],
-    "description": "The color of this screen changes with time.",
-    "controls": "IDK, imagine there are some."
+    "description": "This project has been made as a first test while I was making the page.",
+    "controls": "None"
 }
